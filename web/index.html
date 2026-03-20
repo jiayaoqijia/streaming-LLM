@@ -20,6 +20,16 @@
           <span class="dot dot-green"></span>
         </div>
         <h1 class="title" data-text="streaming-LLM">streaming-LLM</h1>
+        <button id="settings-btn" class="settings-btn" title="Settings">
+          <svg class="settings-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <span class="settings-key-indicators">
+            <span id="indicator-openrouter" class="key-indicator" title="OpenRouter key configured" style="display:none;">OR</span>
+            <span id="indicator-altllm" class="key-indicator" title="AltLLM key configured" style="display:none;">AL</span>
+          </span>
+        </button>
         <div class="wallet-section">
           <button id="wallet-btn" class="wallet-btn">
             <span class="wallet-icon">&#9670;</span>
@@ -31,6 +41,60 @@
           <span class="cost-value" id="cost-value">$0.000000</span>
         </div>
       </div>
+
+      <!-- Settings Panel -->
+      <div id="settings-panel" class="settings-panel">
+        <div class="settings-inner">
+
+          <div class="settings-section">
+            <h3 class="settings-section-title">API Keys</h3>
+
+            <div class="settings-field">
+              <label class="settings-label" for="openrouter-key-input">OpenRouter API Key</label>
+              <div class="settings-key-row">
+                <input type="password" id="openrouter-key-input" class="settings-input" placeholder="sk-or-..." autocomplete="off" spellcheck="false">
+                <button class="settings-toggle-vis" data-target="openrouter-key-input" title="Show / Hide">
+                  <svg class="eye-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+              </div>
+              <a class="settings-link" href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer">Get an OpenRouter key --&gt;</a>
+            </div>
+
+            <div class="settings-field">
+              <label class="settings-label" for="altllm-key-input">AltLLM API Key</label>
+              <div class="settings-key-row">
+                <input type="password" id="altllm-key-input" class="settings-input" placeholder="alt-..." autocomplete="off" spellcheck="false">
+                <button class="settings-toggle-vis" data-target="altllm-key-input" title="Show / Hide">
+                  <svg class="eye-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+              </div>
+              <a class="settings-link" href="https://altllm.ai" target="_blank" rel="noopener noreferrer">Get an AltLLM key --&gt;</a>
+            </div>
+
+            <div class="settings-btn-row">
+              <button id="save-keys-btn" class="settings-action-btn settings-save-btn">Save Keys</button>
+              <button id="clear-keys-btn" class="settings-action-btn settings-clear-btn">Clear Keys</button>
+            </div>
+            <div id="keys-status" class="settings-status"></div>
+          </div>
+
+          <div class="settings-divider"></div>
+
+          <div class="settings-section">
+            <h3 class="settings-section-title">Wallet</h3>
+            <div class="settings-wallet-info">
+              <span class="settings-label">Address:</span>
+              <span id="settings-wallet-address" class="settings-wallet-address">Not connected</span>
+            </div>
+            <button id="settings-wallet-btn" class="settings-action-btn settings-wallet-connect-btn">Connect Wallet</button>
+            <div class="settings-divider-thin"></div>
+            <p class="settings-hint">pathUSD on Tempo mainnet is required for MPP payments. Bridge USDC via tempo.xyz</p>
+            <a class="settings-link" href="https://docs.tempo.xyz/guide/use-accounts/add-funds" target="_blank" rel="noopener noreferrer">Get pathUSD --&gt;</a>
+          </div>
+
+        </div>
+      </div>
+
     </header>
 
     <main class="chat-area" id="chat-area">

@@ -18,6 +18,124 @@ const modelSelect = document.getElementById("model-select");
 const costValue = document.getElementById("cost-value");
 const walletBtn = document.getElementById("wallet-btn");
 const walletLabel = document.getElementById("wallet-label");
+const settingsBtn = document.getElementById("settings-btn");
+const settingsPanel = document.getElementById("settings-panel");
+const openrouterKeyInput = document.getElementById("openrouter-key-input");
+const altllmKeyInput = document.getElementById("altllm-key-input");
+const saveKeysBtn = document.getElementById("save-keys-btn");
+const clearKeysBtn = document.getElementById("clear-keys-btn");
+const keysStatus = document.getElementById("keys-status");
+const indicatorOpenrouter = document.getElementById("indicator-openrouter");
+const indicatorAltllm = document.getElementById("indicator-altllm");
+const settingsWalletAddress = document.getElementById("settings-wallet-address");
+const settingsWalletBtn = document.getElementById("settings-wallet-btn");
+
+// ---- Settings Panel ----
+
+const STORAGE_KEY_OPENROUTER = "streaming-llm-openrouter-key";
+const STORAGE_KEY_ALTLLM = "streaming-llm-altllm-key";
+
+function getStoredOpenRouterKey() {
+  return localStorage.getItem(STORAGE_KEY_OPENROUTER) || "";
+}
+
+function getStoredAltLLMKey() {
+  return localStorage.getItem(STORAGE_KEY_ALTLLM) || "";
+}
+
+function updateKeyIndicators() {
+  const hasOR = getStoredOpenRouterKey().length > 0;
+  const hasAL = getStoredAltLLMKey().length > 0;
+  indicatorOpenrouter.style.display = hasOR ? "inline" : "none";
+  indicatorAltllm.style.display = hasAL ? "inline" : "none";
+}
+
+function loadKeysIntoInputs() {
+  openrouterKeyInput.value = getStoredOpenRouterKey();
+  altllmKeyInput.value = getStoredAltLLMKey();
+}
+
+function showKeysStatus(text, type) {
+  keysStatus.textContent = text;
+  keysStatus.className = "settings-status " + type;
+  setTimeout(() => {
+    keysStatus.textContent = "";
+    keysStatus.className = "settings-status";
+  }, 3000);
+}
+
+function saveKeys() {
+  const orKey = openrouterKeyInput.value.trim();
+  const alKey = altllmKeyInput.value.trim();
+
+  if (orKey) {
+    localStorage.setItem(STORAGE_KEY_OPENROUTER, orKey);
+  } else {
+    localStorage.removeItem(STORAGE_KEY_OPENROUTER);
+  }
+
+  if (alKey) {
+    localStorage.setItem(STORAGE_KEY_ALTLLM, alKey);
+  } else {
+    localStorage.removeItem(STORAGE_KEY_ALTLLM);
+  }
+
+  updateKeyIndicators();
+  showKeysStatus("Keys saved to localStorage", "success");
+}
+
+function clearKeys() {
+  localStorage.removeItem(STORAGE_KEY_OPENROUTER);
+  localStorage.removeItem(STORAGE_KEY_ALTLLM);
+  openrouterKeyInput.value = "";
+  altllmKeyInput.value = "";
+  updateKeyIndicators();
+  showKeysStatus("All keys removed", "cleared");
+}
+
+function toggleSettingsPanel() {
+  const isOpen = settingsPanel.classList.toggle("open");
+  settingsBtn.classList.toggle("active", isOpen);
+  if (isOpen) {
+    loadKeysIntoInputs();
+    updateSettingsWalletUI();
+  }
+}
+
+function updateSettingsWalletUI() {
+  if (connectedAddress) {
+    settingsWalletAddress.textContent = connectedAddress;
+    settingsWalletBtn.textContent = "Disconnect Wallet";
+    settingsWalletBtn.classList.add("connected");
+  } else {
+    settingsWalletAddress.textContent = "Not connected";
+    settingsWalletBtn.textContent = "Connect Wallet";
+    settingsWalletBtn.classList.remove("connected");
+  }
+}
+
+// Show/hide toggle for password inputs
+document.querySelectorAll(".settings-toggle-vis").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const targetId = btn.dataset.target;
+    const input = document.getElementById(targetId);
+    if (input.type === "password") {
+      input.type = "text";
+      btn.classList.add("visible");
+    } else {
+      input.type = "password";
+      btn.classList.remove("visible");
+    }
+  });
+});
+
+settingsBtn.addEventListener("click", toggleSettingsPanel);
+saveKeysBtn.addEventListener("click", saveKeys);
+clearKeysBtn.addEventListener("click", clearKeys);
+settingsWalletBtn.addEventListener("click", async () => {
+  await connectWallet();
+  updateSettingsWalletUI();
+});
 
 // ---- Wallet Connection ----
 
@@ -35,6 +153,7 @@ function updateWalletUI() {
     walletLabel.textContent = "Connect Wallet";
     walletBtn.title = "";
   }
+  updateSettingsWalletUI();
 }
 
 async function connectWallet() {
@@ -257,9 +376,19 @@ async function sendMessage() {
   contentEl.appendChild(typingEl);
 
   try {
+    const headers = { "Content-Type": "application/json" };
+    const storedORKey = getStoredOpenRouterKey();
+    const storedALKey = getStoredAltLLMKey();
+    if (storedORKey) {
+      headers["X-OpenRouter-Key"] = storedORKey;
+    }
+    if (storedALKey) {
+      headers["X-AltLLM-Key"] = storedALKey;
+    }
+
     const res = await fetch("/api/chat", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify({ messages, model, provider: currentProvider }),
     });
 
@@ -378,3 +507,4 @@ sendBtn.addEventListener("click", sendMessage);
 loadModels();
 setupWalletListeners();
 checkExistingConnection();
+updateKeyIndicators();
