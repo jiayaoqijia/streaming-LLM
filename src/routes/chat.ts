@@ -6,14 +6,8 @@ import { createMppx } from "../mpp/server";
 
 const chat = new Hono<{ Bindings: Env }>();
 
-let cachedMppx: ReturnType<typeof createMppx> | null = null;
-let cachedKey: string | null = null;
-
-function getMppx(privateKey: string) {
-  if (cachedMppx && cachedKey === privateKey) return cachedMppx;
-  cachedMppx = createMppx(privateKey);
-  cachedKey = privateKey;
-  return cachedMppx;
+function getMppx(privateKey: string, kv?: KVNamespace) {
+  return createMppx(privateKey, kv);
 }
 
 function formatAmount(price: number): string {
@@ -28,7 +22,7 @@ chat.post("/api/chat", async (c) => {
   const isDemoMode = c.env.DEMO_MODE === "true";
 
   if (!isDemoMode) {
-    const mppx = getMppx(c.env.TEMPO_PRIVATE_KEY);
+    const mppx = getMppx(c.env.TEMPO_PRIVATE_KEY, c.env.MPP_STORE);
 
     // Clone the request so mppx gets an unconsumed body
     const forMppx = c.req.raw.clone();

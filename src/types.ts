@@ -4,6 +4,7 @@ export interface Env {
   TEMPO_PRIVATE_KEY: string;
   DEMO_MODE?: string;
   ASSETS: Fetcher;
+  MPP_STORE: KVNamespace;
 }
 
 export interface ChatRequest {

@@ -2,6 +2,10 @@ name = "streaming-llm"
 main = "src/index.ts"
 compatibility_date = "2025-03-15"
 
+[[kv_namespaces]]
+binding = "MPP_STORE"
+id = "7442e65635834acea1dff5a50854dcde"
+
 [assets]
 directory = "./web"
 run_worker_first = ["/api/*"]
