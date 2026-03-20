@@ -1,15 +1,19 @@
 import { Mppx, tempo } from "mppx/server";
+import { privateKeyToAccount } from "viem/accounts";
+import type { Hex } from "viem";
 
 export function createMppx(privateKey: string) {
+  const account = privateKeyToAccount(privateKey as Hex);
   return Mppx.create({
     methods: [
       tempo({
-        privateKey,
-        testnet: true,
+        account,
+        feePayer: true,
         currency: "0x20c0000000000000000000000000000000000000",
-        sse: { poll: true },
+        sse: true,
       }),
     ],
-    secretKey: privateKey,
+    secretKey: "streaming-llm-secret",
+    realm: "streaming-llm",
   });
 }

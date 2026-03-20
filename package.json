@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "hono": "^4.7.0",
-    "mppx": "^0.3.0"
+    "mppx": "^0.3.0",
+    "viem": "^2.47.5"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250313.0",
