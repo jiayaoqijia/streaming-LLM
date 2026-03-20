@@ -53,7 +53,8 @@ test.describe("MPP mainnet payment flow", () => {
 
     for await (const raw of stream) {
       const chunk = raw.startsWith("data: ") ? raw.slice(6).trim() : raw.trim();
-      if (chunk === "[DONE]" || !chunk) continue;
+      if (chunk === "[DONE]") break;
+      if (!chunk) continue;
 
       try {
         const parsed = JSON.parse(chunk);
@@ -125,7 +126,8 @@ test.describe("MPP mainnet payment flow", () => {
     let tokenCount1 = 0;
     for await (const raw of stream1) {
       const chunk = raw.startsWith("data: ") ? raw.slice(6).trim() : raw.trim();
-      if (chunk === "[DONE]" || !chunk) continue;
+      if (chunk === "[DONE]") break;
+      if (!chunk) continue;
       try {
         const parsed = JSON.parse(chunk);
         if (parsed.token) tokenCount1++;
@@ -149,7 +151,8 @@ test.describe("MPP mainnet payment flow", () => {
     let tokenCount2 = 0;
     for await (const raw of stream2) {
       const chunk = raw.startsWith("data: ") ? raw.slice(6).trim() : raw.trim();
-      if (chunk === "[DONE]" || !chunk) continue;
+      if (chunk === "[DONE]") break;
+      if (!chunk) continue;
       try {
         const parsed = JSON.parse(chunk);
         if (parsed.token) tokenCount2++;
@@ -178,7 +181,7 @@ test.describe("MPP mainnet payment flow", () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        messages: [{ role: "user", content: "Count from 1 to 5." }],
+        messages: [{ role: "user", content: "Say hello." }],
         model: MODEL,
       }),
     });
@@ -187,11 +190,13 @@ test.describe("MPP mainnet payment flow", () => {
 
     for await (const raw of stream) {
       const chunk = raw.startsWith("data: ") ? raw.slice(6).trim() : raw.trim();
-      if (chunk === "[DONE]" || !chunk) continue;
+      if (chunk === "[DONE]") break;
+      if (!chunk) continue;
       try {
         const parsed = JSON.parse(chunk);
         if (parsed.cost !== undefined) costs.push(parsed.cost);
       } catch { /* skip */ }
+      if (costs.length >= 20) break; // safety cap
     }
 
     expect(costs.length).toBeGreaterThan(0);
@@ -231,7 +236,8 @@ test.describe("MPP mainnet payment flow", () => {
 
     for await (const raw of stream) {
       const chunk = raw.startsWith("data: ") ? raw.slice(6).trim() : raw.trim();
-      if (chunk === "[DONE]" || !chunk) continue;
+      if (chunk === "[DONE]") break;
+      if (!chunk) continue;
       try {
         const parsed = JSON.parse(chunk);
         if (parsed.token) tokenCount++;
@@ -279,9 +285,12 @@ test.describe("MPP mainnet payment flow", () => {
     });
 
     let tokenCount = 0;
+    let done = false;
     for await (const raw of stream) {
       const chunk = raw.startsWith("data: ") ? raw.slice(6).trim() : raw.trim();
-      if (chunk === "[DONE]" || !chunk) continue;
+      if (chunk === "[DONE]") { done = true; continue; }
+      if (!chunk) continue;
+      if (done) continue; // keep consuming for receipt event
       try {
         const parsed = JSON.parse(chunk);
         if (parsed.token) tokenCount++;
