@@ -82,4 +82,4 @@ Set in `.dev.vars` (local) or deployment platform (Railway, Cloudflare):
 
 - **Production (Railway):** `pnpm build && pnpm start` via Dockerfile
 - **Alternative (Cloudflare Workers):** `pnpm deploy` with KV namespace for MPP store
-- **Live URL:** https://api-production-5bcc.up.railway.app
+- **Live URL:** https://streamingllm.ottie.xyz

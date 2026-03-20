@@ -4,7 +4,7 @@
 
 **Pay-per-token streaming LLM chat API powered by Machine Payments Protocol**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: AGPL--3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178c6.svg)](https://www.typescriptlang.org/)
 [![Railway](https://img.shields.io/badge/Railway-deployed-0B0D0E.svg)](https://railway.com)
 
@@ -14,7 +14,7 @@
 
 streaming-LLM is an API service that streams LLM completions over Server-Sent Events and charges per output token using MPP (Machine Payments Protocol) payment channels on the Tempo blockchain. Unlike traditional API billing that requires accounts, invoices, and monthly settlements, MPP enables real-time micropayments: clients open a payment channel, and the server charges fractional amounts for each token as it streams. This eliminates per-request payment overhead and makes LLM access fully permissionless.
 
-[Live Demo](https://api-production-5bcc.up.railway.app) | [API Reference](#api-reference) | [Contributing](CONTRIBUTING.md)
+[Live Demo](https://streamingllm.ottie.xyz) | [API Reference](#api-reference) | [Contributing](CONTRIBUTING.md)
 
 ---
 
@@ -231,7 +231,7 @@ Requires a `MPP_STORE` KV namespace bound in `wrangler.toml`. Set secrets via `w
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [AGPL-3.0 License](LICENSE).
 
 ---
 

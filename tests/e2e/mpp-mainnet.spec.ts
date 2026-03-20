@@ -18,7 +18,7 @@ const CLIENT_KEYS = {
   pricing:   "0xa8335f5cc9c4c9a755bb2d5d81c7f0073372b398f50fcce61eb4efb0d452b356",
   receipt:   "0xafc086f82333d1a1c9e8ab51084ea885b059d3f2450d0e0a13d66067baee6ad8",
 } as const;
-const BASE_URL = "https://api-production-5bcc.up.railway.app";
+const BASE_URL = "https://streamingllm.ottie.xyz";
 const MODEL = "meta-llama/llama-4-maverick";
 
 test.describe("MPP mainnet payment flow", () => {
