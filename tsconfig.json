@@ -16,5 +16,5 @@
     "jsxImportSource": "hono/jsx"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "tests"]
+  "exclude": ["node_modules", "tests", "src/node.ts", "src/workers-shim.d.ts"]
 }
