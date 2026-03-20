@@ -226,6 +226,113 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+/* Wallet button */
+.wallet-section {
+  flex-shrink: 0;
+}
+
+.wallet-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border: 1px solid var(--purple);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--purple);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.wallet-btn:hover {
+  background: rgba(140, 141, 252, 0.1);
+  box-shadow:
+    0 0 10px rgba(140, 141, 252, 0.2),
+    0 0 25px rgba(140, 141, 252, 0.08);
+}
+
+.wallet-btn.connected {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.wallet-btn.connected:hover {
+  background: rgba(45, 226, 230, 0.1);
+  box-shadow:
+    0 0 10px rgba(45, 226, 230, 0.2),
+    0 0 25px rgba(45, 226, 230, 0.08);
+}
+
+.wallet-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.wallet-btn.connected .wallet-icon {
+  color: var(--teal);
+  text-shadow: 0 0 6px rgba(45, 226, 230, 0.5);
+}
+
+/* Payment prompt in chat */
+.payment-prompt {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.payment-prompt .payment-info {
+  color: var(--pink);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.payment-prompt .payment-detail {
+  color: var(--dim);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.payment-prompt .payment-link {
+  color: var(--purple);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+
+.payment-prompt .payment-link:hover {
+  color: var(--teal);
+  text-shadow: 0 0 6px rgba(45, 226, 230, 0.3);
+}
+
+.payment-connect-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border: 1px solid var(--purple);
+  border-radius: 4px;
+  background: rgba(140, 141, 252, 0.1);
+  color: var(--purple);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+.payment-connect-btn:hover {
+  background: rgba(140, 141, 252, 0.2);
+  box-shadow: 0 0 10px rgba(140, 141, 252, 0.2);
+}
+
 /* ---- Chat area ---- */
 
 .chat-area {
@@ -542,6 +649,11 @@ body {
 
   .cost-value {
     font-size: 13px;
+  }
+
+  .wallet-btn {
+    font-size: 10px;
+    padding: 5px 10px;
   }
 
   .message {
