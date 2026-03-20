@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "wrangler dev",
     "dev:node": "tsx src/node.ts",
-    "build": "tsc -p tsconfig.node.json",
+    "build": "esbuild src/node.ts --bundle --platform=node --format=esm --outfile=dist/node.js --packages=external --banner:js=\"import{createRequire}from'module';const require=createRequire(import.meta.url);\"",
     "start": "node dist/node.js",
     "deploy": "wrangler deploy",
     "typecheck": "tsc --noEmit",
@@ -22,6 +22,7 @@
     "@cloudflare/workers-types": "^4.20250313.0",
     "@playwright/test": "^1.50.0",
     "@types/node": "^25.5.0",
+    "esbuild": "^0.27.4",
     "tsx": "^4.21.0",
     "typescript": "^5.7.0",
     "wrangler": "^4.0.0"
