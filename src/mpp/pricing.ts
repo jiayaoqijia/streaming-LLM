@@ -8,13 +8,38 @@ export interface ModelInfo {
 
 export const models: ModelInfo[] = [
   // --- OpenRouter models (pricing as of March 2026) ---
+
+  // Flagship models
   {
-    id: "meta-llama/llama-4-maverick",
-    name: "Llama 4 Maverick",
+    id: "anthropic/claude-opus-4.6",
+    name: "Claude Opus 4.6",
     provider: "openrouter",
-    inputPricePerToken: 0.00000015,
-    outputPricePerToken: 0.0000006,
+    inputPricePerToken: 0.000005,
+    outputPricePerToken: 0.000025,
   },
+  {
+    id: "openai/gpt-5.4",
+    name: "GPT-5.4",
+    provider: "openrouter",
+    inputPricePerToken: 0.0000025,
+    outputPricePerToken: 0.000015,
+  },
+  {
+    id: "google/gemini-2.5-pro",
+    name: "Gemini 2.5 Pro",
+    provider: "openrouter",
+    inputPricePerToken: 0.00000125,
+    outputPricePerToken: 0.00001,
+  },
+  {
+    id: "z-ai/glm-5",
+    name: "GLM-5",
+    provider: "openrouter",
+    inputPricePerToken: 0.00000072,
+    outputPricePerToken: 0.0000023,
+  },
+
+  // Mid-tier models
   {
     id: "anthropic/claude-sonnet-4",
     name: "Claude Sonnet 4",
@@ -30,11 +55,11 @@ export const models: ModelInfo[] = [
     outputPricePerToken: 0.000005,
   },
   {
-    id: "google/gemini-2.5-pro",
-    name: "Gemini 2.5 Pro",
+    id: "openai/gpt-5.4-mini",
+    name: "GPT-5.4 Mini",
     provider: "openrouter",
-    inputPricePerToken: 0.00000125,
-    outputPricePerToken: 0.00001,
+    inputPricePerToken: 0.00000075,
+    outputPricePerToken: 0.0000045,
   },
   {
     id: "google/gemini-2.5-flash",
@@ -44,25 +69,20 @@ export const models: ModelInfo[] = [
     outputPricePerToken: 0.0000025,
   },
   {
-    id: "openai/gpt-4.1",
-    name: "GPT-4.1",
+    id: "minimax/minimax-m2.7",
+    name: "MiniMax M2.7",
     provider: "openrouter",
-    inputPricePerToken: 0.000002,
-    outputPricePerToken: 0.000008,
+    inputPricePerToken: 0.0000003,
+    outputPricePerToken: 0.0000012,
   },
+
+  // Budget / open-source models
   {
-    id: "openai/gpt-4.1-mini",
-    name: "GPT-4.1 Mini",
+    id: "meta-llama/llama-4-maverick",
+    name: "Llama 4 Maverick",
     provider: "openrouter",
-    inputPricePerToken: 0.0000004,
-    outputPricePerToken: 0.0000016,
-  },
-  {
-    id: "openai/o4-mini",
-    name: "o4-mini",
-    provider: "openrouter",
-    inputPricePerToken: 0.0000011,
-    outputPricePerToken: 0.0000044,
+    inputPricePerToken: 0.00000015,
+    outputPricePerToken: 0.0000006,
   },
   {
     id: "deepseek/deepseek-r1",
@@ -71,7 +91,8 @@ export const models: ModelInfo[] = [
     inputPricePerToken: 0.0000007,
     outputPricePerToken: 0.0000025,
   },
-  // --- AltLLM models (unchanged) ---
+
+  // --- AltLLM models ---
   {
     id: "altllm-standard",
     name: "AltLLM Standard",
