@@ -18,7 +18,7 @@ export async function* streamCompletion(
 
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(`AltLLM API error ${response.status}: ${text}`);
+    throw new Error(`AltLLM API error (${response.status}). Try an OpenRouter model instead.`);
   }
 
   const reader = response.body?.getReader();
