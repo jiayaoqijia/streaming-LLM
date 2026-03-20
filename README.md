@@ -12,6 +12,12 @@
 
 ---
 
+> **Warning -- Under Active Development**
+>
+> This project has not been audited. It interacts with wallets, private keys, and on-chain payment channels. A misconfigured or malicious integration can compromise your agent and drain your funds. Always review the source code, verify the authors, and do your own research (DYOR) before installing, deploying, or granting permissions. We make no guarantees about safety, integrity, or fitness for any purpose.
+
+---
+
 streaming-LLM is an API service that streams LLM completions over Server-Sent Events and charges per output token using MPP (Machine Payments Protocol) payment channels on the Tempo blockchain. Unlike traditional API billing that requires accounts, invoices, and monthly settlements, MPP enables real-time micropayments: clients open a payment channel, and the server charges fractional amounts for each token as it streams. This eliminates per-request payment overhead and makes LLM access fully permissionless.
 
 [Live Demo](https://streamingllm.ottie.xyz) | [API Reference](#api-reference) | [Contributing](CONTRIBUTING.md)
