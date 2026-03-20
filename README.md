@@ -6,7 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178c6.svg)](https://www.typescriptlang.org/)
-[![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-f38020.svg)](https://workers.cloudflare.com/)
+[![Railway](https://img.shields.io/badge/Railway-deployed-0B0D0E.svg)](https://railway.com)
 
 </div>
 
@@ -14,48 +14,44 @@
 
 streaming-LLM is an API service that streams LLM completions over Server-Sent Events and charges per output token using MPP (Machine Payments Protocol) payment channels on the Tempo blockchain. Unlike traditional API billing that requires accounts, invoices, and monthly settlements, MPP enables real-time micropayments: clients open a payment channel, and the server charges fractional amounts for each token as it streams. This eliminates per-request payment overhead and makes LLM access fully permissionless.
 
-[Live Demo](https://streaming-llm.jiayaoqijia.workers.dev) | [API Reference](#api-reference) | [Contributing](CONTRIBUTING.md)
+[Live Demo](https://api-production-5bcc.up.railway.app) | [API Reference](#api-reference) | [Contributing](CONTRIBUTING.md)
 
 ---
 
 ## Features
 
-- **Per-token streaming payments** -- MPP payment channels charge for each output token in real time, with no upfront deposits or minimum balances
-- **Dual LLM providers** -- Routes requests to OpenRouter (Llama 4 Maverick, Claude Sonnet 4, Gemini 2.5 Pro, DeepSeek R1) or AltLLM (Standard, Basic, Mega)
+- **Per-token streaming payments** -- MPP payment channels charge for each output token in real time
+- **14 models across 2 providers** -- OpenRouter (Claude Opus 4.6, GPT-5.4, Gemini 2.5 Pro, GLM-5, MiniMax M2.7, and more) and AltLLM
 - **Server-Sent Events streaming** -- Responses stream token-by-token with live cost tracking in each SSE chunk
-- **Cyberpunk web UI** -- Dark-themed chat interface built with vanilla HTML/CSS/JS, JetBrains Mono typography, and a real-time cost counter
-- **Cloudflare Workers runtime** -- Edge-deployed globally with KV-backed session persistence
+- **Cyberpunk web UI** -- Dark-themed chat interface with JetBrains Mono typography, wallet connection, settings panel, and real-time cost counter
+- **Dual runtime** -- Runs on both Cloudflare Workers (edge) and Node.js (Railway, Docker)
 - **Hono framework** -- Lightweight, typed HTTP routing with CORS and structured error responses
-- **Demo mode** -- Optional `DEMO_MODE=true` flag bypasses payment for development and testing
-- **7 models across 2 providers** -- Flexible model selection with transparent per-token pricing
+- **Demo mode** -- `DEMO_MODE=true` bypasses payment for development and testing
+- **Wallet connect** -- MetaMask integration for MPP payment flow
+- **Settings panel** -- User-configurable API keys for OpenRouter and AltLLM
 
 ## Architecture
 
 ```
                          +------------------+
                          |   Web UI (SSE)   |
-                         |  cyberpunk theme |
+                         |  wallet connect  |
                          +--------+---------+
                                   |
                                   v
 +------------------+    +------------------+    +------------------+
-|  MPP Client      |--->|  Cloudflare      |--->|  OpenRouter API  |
-|  (payment chan.) |    |  Worker (Hono)   |    |  (multi-model)   |
-+------------------+    |                  |    +------------------+
-                        |  /api/health     |
-                        |  /api/models     |    +------------------+
-                        |  /api/chat (SSE) |--->|  AltLLM API      |
-                        |                  |    +------------------+
-                        +--------+---------+
-                                 |
-                        +--------+---------+
-                        |  Cloudflare KV   |
-                        |  (MPP sessions)  |
-                        +------------------+
+|  MPP Client      |--->|  Hono Server     |--->|  OpenRouter API  |
+|  (payment chan.) |    |  (Node.js /      |    |  (11 models)     |
++------------------+    |   CF Workers)    |    +------------------+
+                        |                  |
+                        |  /api/health     |    +------------------+
+                        |  /api/models     |--->|  AltLLM API      |
+                        |  /api/chat (SSE) |    |  (3 models)      |
+                        +--------+---------+    +------------------+
                                  |
                         +--------+---------+
                         |  Tempo Blockchain |
-                        |  (settlements)   |
+                        |  (pathUSD settle) |
                         +------------------+
 ```
 
@@ -73,7 +69,10 @@ pnpm install
 cp .dev.vars.example .dev.vars
 # Edit .dev.vars with your API keys (see Environment Variables below)
 
-# Start the local dev server
+# Start the local dev server (Node.js)
+pnpm dev:node
+
+# Or start with Cloudflare Workers
 pnpm dev
 ```
 
@@ -89,13 +88,13 @@ The development server runs at `http://localhost:8787`. Open it in a browser to 
 
 ### POST /api/chat
 
-The chat endpoint is gated by MPP payment channels. The flow works as follows:
+The chat endpoint is gated by MPP payment channels (when `DEMO_MODE=false`). The flow:
 
 1. **Client sends a chat request** without payment credentials
-2. **Server responds with HTTP 402** containing an MPP challenge (payment channel parameters, per-token price, wallet address)
-3. **Client opens a payment channel** on Tempo blockchain using the challenge parameters
+2. **Server responds with HTTP 402** containing an MPP challenge
+3. **Client opens a payment channel** on Tempo blockchain
 4. **Client retries the request** with MPP authorization headers
-5. **Server streams tokens via SSE**, calling `paymentStream.charge()` for each output token
+5. **Server streams tokens via SSE**, charging per output token
 6. **Each SSE chunk** includes `{ token: "...", cost: 0.000045 }` with the running total
 
 **Request body:**
@@ -105,53 +104,73 @@ The chat endpoint is gated by MPP payment channels. The flow works as follows:
   "messages": [
     { "role": "user", "content": "Hello, how are you?" }
   ],
-  "model": "anthropic/claude-sonnet-4"
+  "model": "anthropic/claude-opus-4.6"
 }
 ```
 
 **SSE response stream:**
 
 ```
-data: {"token":"Hello","cost":0.000015}
-data: {"token":"!","cost":0.00003}
-data: {"token":" I'm","cost":0.000045}
+data: {"token":"Hello","cost":0.000025}
+data: {"token":"!","cost":0.00005}
+data: {"token":" How","cost":0.000075}
 data: [DONE]
 ```
 
 ## Models and Pricing
 
-| Model | Provider | Input (per token) | Output (per token) |
-|-------|----------|-------------------|---------------------|
-| Llama 4 Maverick | OpenRouter | $0.0000002 | $0.0000008 |
-| Claude Sonnet 4 | OpenRouter | $0.000003 | $0.000015 |
-| Gemini 2.5 Pro | OpenRouter | $0.0000025 | $0.000015 |
-| DeepSeek R1 | OpenRouter | $0.0000005 | $0.000002 |
-| AltLLM Standard | AltLLM | $0.0000006 | $0.0000024 |
-| AltLLM Basic | AltLLM | $0.0000035 | $0.000028 |
-| AltLLM Mega | AltLLM | $0.00003 | $0.00015 |
+### OpenRouter
 
-Prices are denominated in the Tempo network currency. The MPP payment channel charges the output price per token as each token streams.
+| Model | ID | Input/M | Output/M |
+|-------|-----|---------|----------|
+| Claude Opus 4.6 | `anthropic/claude-opus-4.6` | $5.00 | $25.00 |
+| GPT-5.4 | `openai/gpt-5.4` | $2.50 | $15.00 |
+| Gemini 2.5 Pro | `google/gemini-2.5-pro` | $1.25 | $10.00 |
+| GLM-5 | `z-ai/glm-5` | $0.72 | $2.30 |
+| Claude Sonnet 4 | `anthropic/claude-sonnet-4` | $3.00 | $15.00 |
+| Claude Haiku 4.5 | `anthropic/claude-haiku-4.5` | $1.00 | $5.00 |
+| GPT-5.4 Mini | `openai/gpt-5.4-mini` | $0.75 | $4.50 |
+| Gemini 2.5 Flash | `google/gemini-2.5-flash` | $0.30 | $2.50 |
+| MiniMax M2.7 | `minimax/minimax-m2.7` | $0.30 | $1.20 |
+| Llama 4 Maverick | `meta-llama/llama-4-maverick` | $0.15 | $0.60 |
+| DeepSeek R1 | `deepseek/deepseek-r1` | $0.70 | $2.50 |
+
+### AltLLM
+
+| Model | ID | Input/M | Output/M |
+|-------|-----|---------|----------|
+| AltLLM Standard | `altllm-standard` | $0.60 | $2.40 |
+| AltLLM Basic | `altllm-basic` | $3.50 | $28.00 |
+| AltLLM Mega | `altllm-mega` | $30.00 | $150.00 |
+
+Prices are in USD per million tokens. The MPP payment channel charges the output price per token as each token streams. Payment is in pathUSD on Tempo mainnet.
 
 ## Environment Variables
 
-Set these in `.dev.vars` for local development or in the Cloudflare dashboard for production:
+Set these in `.dev.vars` (local) or your deployment platform:
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `OPENROUTER_API_KEY` | Yes | API key from [OpenRouter](https://openrouter.ai/) |
-| `ALTLLM_API_KEY` | Yes | API key for AltLLM provider |
-| `TEMPO_PRIVATE_KEY` | Yes | Hex-encoded private key for the server's Tempo wallet (used to sign payment channel operations) |
-| `DEMO_MODE` | No | Set to `"true"` to bypass MPP payment gating (for development/testing only) |
-
-The `MPP_STORE` KV namespace is configured in `wrangler.toml` and used to persist payment channel session state.
+| `OPENROUTER_API_KEY` | Yes | API key from [OpenRouter](https://openrouter.ai/keys) |
+| `ALTLLM_API_KEY` | Yes | API key from [AltLLM](https://altllm.ai) |
+| `TEMPO_PRIVATE_KEY` | Yes | Hex-encoded private key for the server's Tempo wallet |
+| `DEMO_MODE` | No | Set to `"true"` to bypass MPP payment (for dev/testing) |
 
 ## Web UI
 
-The bundled web interface is served as static assets from the `web/` directory. It features a dark cyberpunk aesthetic with neon accent colors, JetBrains Mono monospace typography, and a real-time token cost counter that updates as each SSE chunk arrives. The UI handles the full MPP payment flow client-side: it receives the 402 challenge, opens a payment channel, and then consumes the authenticated SSE stream. Model selection is populated dynamically from the `/api/models` endpoint.
+The bundled web interface (`web/`) features:
+
+- Dark cyberpunk aesthetic with neon purple/teal accents
+- JetBrains Mono typography with CRT scanline overlay
+- Real-time cost counter updating per SSE chunk
+- Provider switcher (OpenRouter / AltLLM) with model dropdown
+- Wallet connect button (MetaMask) for MPP payments
+- Settings panel with API key management
+- Links to sign up for OpenRouter and AltLLM
+- pathUSD onboarding info for Tempo blockchain
+- Terms of Service and Privacy Policy pages
 
 ## MPP Payment Flow
-
-MPP (Machine Payments Protocol) enables machine-to-machine micropayments over payment channels. Here is how it works in streaming-LLM:
 
 ```
 Client                          Server                      Tempo Blockchain
@@ -171,13 +190,7 @@ Client                          Server                      Tempo Blockchain
   |                               |------------------------------>|
 ```
 
-The server uses the `mppx` library with Tempo as the payment method. Payment channel state is persisted in Cloudflare KV (`MPP_STORE`). The server wallet signs operations using the configured `TEMPO_PRIVATE_KEY`. The currency address `0x20c0...` identifies the payment token on the Tempo network.
-
-Key properties:
-- **No per-request overhead** -- The payment channel is opened once and reused across the entire streaming session
-- **Real-time charging** -- Each output token triggers a `charge()` call that increments the channel balance
-- **Permissionless** -- No accounts, API keys, or signup required; only a funded Tempo wallet
-- **SSE cost tracking** -- Every SSE chunk includes the cumulative cost so the client can display spend in real time
+The server uses the `mppx` library with Tempo as the payment method. Payment channel state is persisted in memory (Node.js) or Cloudflare KV (Workers). The currency is pathUSD (`0x20c0...`) on Tempo mainnet.
 
 ## Testing
 
@@ -185,22 +198,36 @@ Key properties:
 # Type checking
 pnpm typecheck
 
-# End-to-end tests (Playwright)
+# End-to-end tests (Playwright, demo mode)
 pnpm test:e2e
+
+# Mainnet MPP tests (requires funded wallets)
+npx playwright test --config tests/playwright.config.ts tests/e2e/mpp-mainnet.spec.ts
 ```
 
 ## Deployment
 
-streaming-LLM deploys to Cloudflare Workers:
+### Railway (recommended)
+
+The project includes a `Dockerfile` and `src/node.ts` entry point for Node.js deployment:
 
 ```bash
-# Deploy to production
+# Build for production
+pnpm build
+
+# Start production server
+pnpm start
+```
+
+Set environment variables in the Railway dashboard. The server listens on `$PORT` (auto-assigned by Railway).
+
+### Cloudflare Workers
+
+```bash
 pnpm deploy
 ```
 
-Before deploying, set the production environment variables in the Cloudflare dashboard under Workers > streaming-llm > Settings > Variables. The KV namespace `MPP_STORE` must be created and bound as configured in `wrangler.toml`.
-
-The worker serves both the API routes (`/api/*`) and the static web UI. Requests matching `/api/*` are handled by the worker first; all other requests serve static assets from the `web/` directory.
+Requires a `MPP_STORE` KV namespace bound in `wrangler.toml`. Set secrets via `wrangler secret put`.
 
 ## License
 
@@ -210,51 +237,51 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Development Notes
 
-The following notes are intended for AI coding assistants and contributors working on the codebase.
-
-### Stack
-
-- **Runtime:** Cloudflare Workers
-- **Framework:** Hono
-- **Payments:** mppx (MPP -- Machine Payments Protocol)
-- **LLM Backend:** OpenRouter (multi-model), AltLLM
-- **Web UI:** Static HTML/CSS/JS (dark cyberpunk theme, JetBrains Mono)
+The following notes are intended for AI coding assistants and contributors.
 
 ### Repository Structure
 
 ```
 src/
-  index.ts          -- Worker entry point, Hono app
+  index.ts          -- Worker entry point (Cloudflare Workers)
+  node.ts           -- Node.js entry point (Railway, Docker)
   routes/
     chat.ts         -- POST /api/chat (MPP session-gated, SSE streaming)
-    models.ts       -- GET /api/models (free, list available models)
+    models.ts       -- GET /api/models
     health.ts       -- GET /api/health
   mpp/
-    server.ts       -- Mppx server config (tempo payment method)
+    server.ts       -- Mppx server config (Tempo, pathUSD, feePayer)
     pricing.ts      -- Per-token pricing by model
   llm/
     openrouter.ts   -- OpenRouter streaming proxy
     altllm.ts       -- AltLLM streaming proxy
     provider.ts     -- Provider routing logic
     types.ts        -- LLM request/response types
-  types.ts          -- Shared types
+  types.ts          -- Shared types (Env bindings)
 web/
-  index.html        -- Chat UI with real-time cost counter
-  styles.css        -- Dark cyberpunk theme (eth2030 style)
-  app.js            -- Client-side logic, MPP client, SSE consumption
+  index.html        -- Chat UI with wallet connect and settings
+  styles.css        -- Cyberpunk theme
+  app.js            -- Client-side logic, SSE consumption
+  terms.html        -- Terms of Service
+  privacy.html      -- Privacy Policy
+tests/
+  e2e/              -- Playwright E2E tests
+  playwright.config.ts
+Dockerfile          -- Multi-stage Docker build
 wrangler.toml       -- Cloudflare Workers config
-package.json
-tsconfig.json
 ```
 
 ### Commands
 
 ```bash
 pnpm install          # Install dependencies
-pnpm dev              # Local dev server (wrangler dev)
+pnpm dev              # Local dev (Cloudflare Workers)
+pnpm dev:node         # Local dev (Node.js)
+pnpm build            # Build for Node.js production
+pnpm start            # Start Node.js production server
 pnpm deploy           # Deploy to Cloudflare Workers
 pnpm typecheck        # Type checking
-pnpm test:e2e         # End-to-end tests (Playwright)
+pnpm test:e2e         # Playwright E2E tests
 ```
 
 ### Coding Style
@@ -268,3 +295,4 @@ pnpm test:e2e         # End-to-end tests (Playwright)
 ### Git Conventions
 
 - Conventional commits: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`
+- No co-author lines
