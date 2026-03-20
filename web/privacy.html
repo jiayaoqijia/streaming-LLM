@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — streaming-LLM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    html, body {
+      overflow: auto;
+      height: auto;
+    }
+
+    .legal-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    .legal-nav {
+      margin-bottom: 32px;
+    }
+
+    .legal-nav a {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--purple);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .legal-nav a:hover {
+      color: var(--teal);
+      text-shadow: 0 0 8px rgba(45, 226, 230, 0.4);
+    }
+
+    .legal-title {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--purple);
+      text-shadow: 0 0 8px rgba(140, 141, 252, 0.4);
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .legal-updated {
+      font-size: 12px;
+      color: var(--dim);
+      margin-bottom: 40px;
+      letter-spacing: 1px;
+    }
+
+    .legal-section {
+      margin-bottom: 36px;
+    }
+
+    .legal-section h2 {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(45, 226, 230, 0.15);
+    }
+
+    .legal-section p,
+    .legal-section li {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 10px;
+    }
+
+    .legal-section ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .legal-section ul li {
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .legal-section ul li::before {
+      content: ">";
+      position: absolute;
+      left: 0;
+      color: var(--purple);
+      font-weight: 700;
+    }
+
+    .legal-section a {
+      color: var(--teal);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(45, 226, 230, 0.3);
+      transition: border-color 0.2s ease;
+    }
+
+    .legal-section a:hover {
+      border-color: var(--teal);
+      text-shadow: 0 0 6px rgba(45, 226, 230, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="scanline-overlay"></div>
+  <div class="legal-container">
+    <nav class="legal-nav">
+      <a href="/">&lt;-- back to chat</a>
+    </nav>
+
+    <h1 class="legal-title">Privacy Policy</h1>
+    <p class="legal-updated">Last updated: March 2026</p>
+
+    <div class="legal-section">
+      <h2>1. Information Collected</h2>
+      <p>streaming-LLM collects and processes the following categories of information during normal operation:</p>
+      <ul>
+        <li><strong>Prompts and messages:</strong> The text content you submit to the service is forwarded to third-party LLM providers (OpenRouter and/or AltLLM) for inference. Prompts are transmitted in real time and are not stored on streaming-LLM servers.</li>
+        <li><strong>Wallet addresses:</strong> Your public wallet address is used to establish and manage MPP payment channel sessions. Wallet addresses are public blockchain data and are visible on the Tempo blockchain ledger.</li>
+        <li><strong>Usage metadata:</strong> The service records operational metadata including token counts (input and output), the model selected for each request, timestamps of requests, and payment channel session identifiers. This data is used for billing reconciliation and service monitoring.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>2. How We Use Information</h2>
+      <p>Information collected by the service is used for the following purposes:</p>
+      <ul>
+        <li><strong>Transmit prompts to LLM providers:</strong> Your messages are forwarded to OpenRouter or AltLLM (depending on the provider you select) so that the chosen model can generate a response. The response is streamed back to you via SSE.</li>
+        <li><strong>Process payments via MPP/Tempo:</strong> Your wallet address and token consumption data are used to calculate charges and process per-token payments through your MPP payment channel on the Tempo blockchain.</li>
+        <li><strong>Improve the service:</strong> Aggregated, anonymized usage metadata (such as total token volume by model, error rates, and latency distributions) may be used to identify performance issues, optimize infrastructure, and inform pricing decisions. Individual prompts are never used for this purpose.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>3. Third-Party Data Sharing</h2>
+      <p>The service shares data with the following third parties as a necessary part of its operation:</p>
+      <ul>
+        <li><strong>OpenRouter:</strong> When you select the OpenRouter provider, your prompts and any system messages are transmitted to OpenRouter's API for model inference. OpenRouter's own privacy policy governs how they handle this data.</li>
+        <li><strong>AltLLM:</strong> When you select the AltLLM provider, your prompts and any system messages are transmitted to AltLLM's API for model inference. AltLLM's own privacy policy governs how they handle this data.</li>
+        <li><strong>Tempo Blockchain:</strong> Payment transactions, including channel open/close operations, payment amounts, and wallet addresses, are recorded on the Tempo blockchain. Blockchain transactions are public and immutable by design.</li>
+        <li><strong>Cloudflare:</strong> The service runs on Cloudflare Workers. Cloudflare processes HTTP requests as part of its hosting and edge network infrastructure. Cloudflare's privacy policy governs their handling of request-level data (IP addresses, headers, etc.).</li>
+      </ul>
+      <p>The service does not sell, rent, or trade your data to any third party for marketing or advertising purposes.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>4. Data We Do NOT Collect</h2>
+      <p>streaming-LLM is designed to operate without collecting personal information. Specifically:</p>
+      <ul>
+        <li>No personal identifying information (name, physical address, phone number) is collected.</li>
+        <li>No email addresses are collected or required.</li>
+        <li>No passwords are collected. Authentication is handled entirely through wallet-based cryptographic signatures.</li>
+        <li>No KYC (Know Your Customer) data is collected. The service does not require identity verification.</li>
+        <li>No user accounts exist. Your wallet address is the only identifier associated with your usage.</li>
+        <li>No tracking pixels, fingerprinting scripts, or advertising identifiers are used.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>5. Data Retention</h2>
+      <ul>
+        <li><strong>Conversation content:</strong> Not stored. Prompts and responses are streamed in real time and are not persisted to disk or database on the service's infrastructure.</li>
+        <li><strong>Payment records:</strong> Recorded on the Tempo blockchain. On-chain transaction data is immutable and permanent. The service operator does not control the retention of blockchain data.</li>
+        <li><strong>Usage logs:</strong> Operational metadata (token counts, model selection, timestamps, error logs) is retained for a maximum of 90 days. After 90 days, usage logs are permanently deleted.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>6. Security</h2>
+      <p>The service implements the following security measures to protect data in transit and at rest:</p>
+      <ul>
+        <li><strong>TLS encryption:</strong> All API traffic between your client and the service, and between the service and LLM providers, is encrypted using TLS (Transport Layer Security). Unencrypted HTTP connections are not accepted.</li>
+        <li><strong>No server-side prompt storage:</strong> Because prompts are streamed and not persisted, there is no stored prompt database that could be compromised in a data breach.</li>
+        <li><strong>Payment security:</strong> Payments are secured via Tempo blockchain escrow contracts. The MPP payment channel mechanism ensures that funds are locked in on-chain contracts and can only be settled according to the channel's agreed-upon terms. The service operator never has custody of your wallet funds.</li>
+        <li><strong>Infrastructure isolation:</strong> The service runs on Cloudflare Workers, which provides per-request isolation through V8 isolates. Each request executes in its own sandboxed environment.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>7. Cookies</h2>
+      <p>streaming-LLM does not use cookies. The web interface is built with vanilla HTML, CSS, and JavaScript. No session cookies, tracking cookies, or third-party cookies are set. No analytics scripts (Google Analytics, Mixpanel, etc.) are loaded. Local storage and session storage may be used by the client-side application for UI state (such as the last selected model), but this data remains entirely in your browser and is never transmitted to the server.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>8. Children</h2>
+      <p>This service is not intended for use by individuals under the age of 18. The service operator does not knowingly collect or process data from minors. Because no personal information is collected, the service has no mechanism to verify the age of its users. If you are under 18, you should not use this service.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>9. Your Rights</h2>
+      <p>Because streaming-LLM does not store personal data, there is generally no personal information to access, correct, or delete. Specifically:</p>
+      <ul>
+        <li><strong>Right to access:</strong> No personal data is stored on the service's servers. Usage metadata is linked only to wallet addresses, which are pseudonymous.</li>
+        <li><strong>Right to deletion:</strong> There is no stored conversation data to delete. Usage logs are automatically purged after 90 days.</li>
+        <li><strong>On-chain data:</strong> Transaction records on the Tempo blockchain are immutable by the nature of blockchain technology. Neither the service operator nor any other party can modify or delete on-chain data.</li>
+        <li><strong>Right to data portability:</strong> On-chain payment data is publicly accessible and can be independently queried from the Tempo blockchain by anyone.</li>
+      </ul>
+      <p>If you have questions about your data or believe the service has collected information it should not have, please contact us via the channel listed below.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>10. Changes to This Policy</h2>
+      <p>This privacy policy may be updated at any time. Changes will be reflected on this page with an updated "Last updated" date. Your continued use of the service after any changes constitutes your acceptance of the revised policy. We encourage you to review this page periodically.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>11. Contact</h2>
+      <p>For privacy-related questions, concerns, or data inquiries, please open an issue on the project's GitHub repository:</p>
+      <p><a href="https://github.com/jiayaoqijia/streaming-LLM">https://github.com/jiayaoqijia/streaming-LLM</a></p>
+    </div>
+  </div>
+</body>
+</html>

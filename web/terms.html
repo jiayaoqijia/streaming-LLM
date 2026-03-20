@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service — streaming-LLM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    html, body {
+      overflow: auto;
+      height: auto;
+    }
+
+    .legal-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    .legal-nav {
+      margin-bottom: 32px;
+    }
+
+    .legal-nav a {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--purple);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .legal-nav a:hover {
+      color: var(--teal);
+      text-shadow: 0 0 8px rgba(45, 226, 230, 0.4);
+    }
+
+    .legal-title {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--purple);
+      text-shadow: 0 0 8px rgba(140, 141, 252, 0.4);
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .legal-updated {
+      font-size: 12px;
+      color: var(--dim);
+      margin-bottom: 40px;
+      letter-spacing: 1px;
+    }
+
+    .legal-section {
+      margin-bottom: 36px;
+    }
+
+    .legal-section h2 {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(45, 226, 230, 0.15);
+    }
+
+    .legal-section p,
+    .legal-section li {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 10px;
+    }
+
+    .legal-section ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .legal-section ul li {
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .legal-section ul li::before {
+      content: ">";
+      position: absolute;
+      left: 0;
+      color: var(--purple);
+      font-weight: 700;
+    }
+
+    .legal-section a {
+      color: var(--teal);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(45, 226, 230, 0.3);
+      transition: border-color 0.2s ease;
+    }
+
+    .legal-section a:hover {
+      border-color: var(--teal);
+      text-shadow: 0 0 6px rgba(45, 226, 230, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="scanline-overlay"></div>
+  <div class="legal-container">
+    <nav class="legal-nav">
+      <a href="/">&lt;-- back to chat</a>
+    </nav>
+
+    <h1 class="legal-title">Terms of Service</h1>
+    <p class="legal-updated">Last updated: March 2026</p>
+
+    <div class="legal-section">
+      <h2>1. Service Description</h2>
+      <p>streaming-LLM provides API access to large language models (LLMs) via Machine Payments Protocol (MPP) payment channels. The service streams generated tokens to clients in real time using Server-Sent Events (SSE). All charges are assessed on a per-token basis, denominated in pathUSD on the Tempo blockchain.</p>
+      <p>The service supports multiple LLM providers, including OpenRouter and AltLLM, giving users access to a range of models through a unified interface. No account registration is required. Access is gated entirely through wallet-based MPP payment channel sessions.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>2. User Responsibilities</h2>
+      <p>By using this service, you agree to the following responsibilities:</p>
+      <ul>
+        <li>You are solely responsible for maintaining the security of your private keys and wallet credentials. Lost or compromised keys cannot be recovered by the service operator.</li>
+        <li>You must comply with all applicable local, national, and international laws and regulations when using the service.</li>
+        <li>You agree to pay for tokens consumed at the published per-token pricing rates for the model you select. Pricing is displayed before you initiate a session.</li>
+        <li>You must not attempt to abuse, overload, or degrade the service through excessive requests, automated scraping, or denial-of-service activity.</li>
+        <li>You are responsible for the content of your prompts and for any downstream use of the generated output.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>3. Prohibited Uses</h2>
+      <p>The following uses of the service are strictly prohibited:</p>
+      <ul>
+        <li>Generating malware, exploit code, phishing content, or any software intended to cause harm to systems or individuals.</li>
+        <li>Producing illegal content, including but not limited to child sexual abuse material (CSAM), content that facilitates terrorism, or content that violates applicable laws.</li>
+        <li>Using the service to generate content for the purpose of market manipulation, pump-and-dump schemes, or fraudulent financial promotions.</li>
+        <li>Attempting to circumvent rate limits, payment requirements, or other access controls implemented by the service.</li>
+        <li>Sharing, reselling, or redistributing access to active payment channel sessions without authorization from the service operator.</li>
+        <li>Using the service to generate spam, misleading information presented as fact, or synthetic media intended to deceive.</li>
+      </ul>
+      <p>Violation of these terms may result in immediate termination of your payment channel session and blocking of your wallet address from future access.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>4. Payment Terms</h2>
+      <p>All payments are processed through MPP (Machine Payments Protocol) payment channels using pathUSD on the Tempo blockchain.</p>
+      <ul>
+        <li>Charges are assessed on a per-token basis. The applicable rate depends on the model selected and is displayed via the /api/models endpoint before session initiation.</li>
+        <li>No refunds are issued for tokens that have already been consumed and streamed. Once a token is delivered via SSE, the corresponding charge is final.</li>
+        <li>Channel deposits that have not been consumed are refundable. You may close your payment channel on-chain at any time to reclaim unspent funds according to the Tempo blockchain settlement process.</li>
+        <li>No credit card, bank account, or traditional payment method is required. All transactions are wallet-based and settled on the Tempo blockchain.</li>
+        <li>No user account or registration is needed. Your wallet address serves as your identity for billing purposes.</li>
+        <li>The service operator is not responsible for transaction fees, gas costs, or delays incurred on the Tempo blockchain itself.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>5. AI Output Disclaimers</h2>
+      <p>LLM-generated responses may contain factual errors, hallucinations, outdated information, or biased content. You should independently verify any information obtained through this service before relying on it.</p>
+      <ul>
+        <li>The output of this service does not constitute financial advice, legal advice, medical advice, or professional advice of any kind.</li>
+        <li>Do your own research (DYOR) before making any decisions based on AI-generated content, especially regarding financial transactions, investments, or health-related matters.</li>
+        <li>The service does not endorse, recommend, or promote any specific cryptocurrency, token, blockchain project, or financial instrument. Any mention of such in generated output reflects the training data of the underlying model, not the opinion of the service operator.</li>
+        <li>AI-generated code should be reviewed and tested before use in any production environment. The service operator accepts no liability for bugs, security vulnerabilities, or failures in generated code.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>6. Data Handling</h2>
+      <p>Your prompts and messages are forwarded to third-party LLM providers (OpenRouter and/or AltLLM) for processing. The service acts as a streaming proxy and does not store conversation content on its own servers.</p>
+      <ul>
+        <li>Prompts are transmitted to the selected LLM provider via encrypted connections (TLS). The service does not retain, log, or archive the content of your prompts or the generated responses.</li>
+        <li>Usage metadata is retained for billing and operational purposes. This includes token counts, model selection, timestamps, and wallet addresses associated with payment channel sessions.</li>
+        <li>The data handling practices of the third-party LLM providers (OpenRouter, AltLLM) are governed by their own respective privacy policies and terms of service, which you should review independently.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>7. Third-Party Services</h2>
+      <p>This service relies on the following third-party services and infrastructure:</p>
+      <ul>
+        <li><strong>OpenRouter</strong> — Provides access to a range of LLM models. Prompts sent via the OpenRouter provider are processed according to OpenRouter's terms and privacy policy.</li>
+        <li><strong>AltLLM</strong> — An alternative LLM provider option. Prompts sent via the AltLLM provider are processed according to AltLLM's terms and privacy policy.</li>
+        <li><strong>Tempo Blockchain</strong> — Provides the payment infrastructure for MPP channels and pathUSD transactions. All payment channel operations (opening, closing, settlement) are governed by Tempo's on-chain smart contracts.</li>
+        <li><strong>Cloudflare Workers</strong> — Provides the serverless compute environment in which the streaming-LLM service operates. Cloudflare's infrastructure policies apply to request routing and edge processing.</li>
+      </ul>
+      <p>The service operator is not responsible for outages, changes in terms, or data handling practices of these third-party services.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>8. Intellectual Property</h2>
+      <ul>
+        <li>You retain ownership of the input (prompts) you submit to the service and the output (responses) generated from those prompts, subject to the terms of the underlying LLM provider.</li>
+        <li>The streaming-LLM service name, branding, user interface design, and source code are owned by the streaming-LLM contributors and are licensed under the terms specified in the project repository.</li>
+        <li>Nothing in these terms grants you a license to use the streaming-LLM name, logo, or branding for your own products or services.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>9. Limitation of Liability</h2>
+      <p>THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, WHETHER EXPRESS, IMPLIED, OR STATUTORY. THE SERVICE OPERATOR DISCLAIMS ALL WARRANTIES, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.</p>
+      <ul>
+        <li>The service operator shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or goodwill.</li>
+        <li>The service operator accepts no liability for trading losses, investment losses, or financial damages arising from reliance on AI-generated content.</li>
+        <li>The service operator is not liable for errors, interruptions, or inaccuracies in API responses, including but not limited to model hallucinations, truncated streams, or failed payment channel transactions.</li>
+        <li>In no event shall the total liability of the service operator exceed the amount you have paid through the service in the 30 days preceding the claim.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>10. Termination</h2>
+      <ul>
+        <li>The service may be discontinued, modified, or suspended at any time without prior notice. The service operator is under no obligation to maintain continuous availability.</li>
+        <li>If the service is discontinued, any open payment channels can be settled on-chain through the Tempo blockchain's standard channel closure mechanism. Unspent deposits in open channels remain claimable by the channel owner.</li>
+        <li>The service operator reserves the right to block specific wallet addresses from accessing the service if those addresses are associated with prohibited use as defined in Section 3.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>11. Changes to These Terms</h2>
+      <p>These terms may be updated at any time. Changes will be reflected on this page with an updated "Last updated" date. Your continued use of the service after any changes constitutes your acceptance of the revised terms. It is your responsibility to review these terms periodically.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>12. Contact</h2>
+      <p>For questions, concerns, or reports of abuse, please open an issue on the project's GitHub repository:</p>
+      <p><a href="https://github.com/jiayaoqijia/streaming-LLM">https://github.com/jiayaoqijia/streaming-LLM</a></p>
+    </div>
+  </div>
+</body>
+</html>

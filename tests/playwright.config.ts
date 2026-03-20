@@ -9,10 +9,11 @@ export default defineConfig({
     baseURL: "http://localhost:8787",
     trace: "on-first-retry",
   },
-  webServer: {
-    command: "pnpm dev",
-    port: 8787,
-    reuseExistingServer: true,
-    timeout: 15000,
-  },
+  // webServer disabled for production/mainnet testing
+  // webServer: {
+  //   command: "pnpm dev",
+  //   port: 8787,
+  //   reuseExistingServer: true,
+  //   timeout: 15000,
+  // },
 });
